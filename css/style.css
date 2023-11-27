@@ -3,6 +3,9 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
 html {
@@ -35,7 +38,7 @@ main button {
   border: none;
   background-color: #171717;
   color: #D4D4D4;
-  padding: 20px;
+  padding: 20px 40px;
   border-radius: 0.5rem;
   font-size: 1.5rem;
 }
@@ -49,6 +52,7 @@ main button:hover {
   grid-template-rows: repeat(3, 1fr);
   grid-template-columns: repeat(3, 1fr);
   gap: 15px;
+  border-radius: 1.5rem;
 }
 .game-grid .game-square {
   width: 100px;
@@ -60,4 +64,8 @@ main button:hover {
   justify-content: center;
   font-family: "Quicksand";
   font-size: 5rem;
+}
+.game-grid .game-square:hover {
+  cursor: pointer;
+  background-color: #1c1c1c;
 }
