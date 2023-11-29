@@ -25,10 +25,11 @@ const gameModule = (function(){
 
         rounds: 0,
         index: 0,
+        playable: true,
 
         playRound: function(index) {
             
-            if(gameBoard.fields[index] !== 0) return;
+            if(gameBoard.fields[index] !== 0 || this.playable === false) return;
 
             if (handler.rounds % 2 === 0) {
 
@@ -98,19 +99,34 @@ const gameModule = (function(){
         win: function(winner){
 
             modal.classList.remove('closed');
+            winnerSpan.textContent = `${winner.mark.toUpperCase()}`;
+            winnerMsg.textContent = 'Wins'
+            handler.playable = false;
+            modal.showModal();
+            turnDiv.classList.add('closed')
+            
+        },
+        
+        tie: function(){
+            
+            modal.classList.remove('closed');
+            winnerSpan.textContent = 'Tie';
+            winnerMsg.textContent = ''
+            handler.playable = false;
             modal.showModal();
             turnDiv.classList.add('closed')
 
         },
-
+        
         restartGame: function restartGame(){
-
+            
             gameBoard.fields = [0,0,0,0,0,0,0,0,0];
             handler.rounds = 0;
             playerO.turn = false;
             modal.classList.add('closed')
             turnDiv.classList.remove('closed')
             modal.close()
+            handler.playable = true;
             render();
         
         }
@@ -139,6 +155,9 @@ const gameModule = (function(){
         modal.close();
         modal.classList.add('closed')
     });
+    
+    let winnerSpan = document.querySelector('.winner');
+    let winnerMsg = document.querySelector('.winner-msg')
 
     function render(){
 
@@ -154,23 +173,26 @@ const gameModule = (function(){
 
         for(i = 0; i < gameBoard.fields.length; i++){
 
-            switch();
-            
-            if(gameBoard.fields[i] === 1){
+            switch(gameBoard.fields[i]){
 
+                case 1:
                 squares[i].textContent = 'X';
-                
-            } else if(gameBoard.fields[i] === -1){
-                
+                break
+
+                case -1:
                 squares[i].textContent = 'O';
-                
-            } else if(gameBoard.fields[i] === 0){
-                
+                break
+
+                case 0:
                 squares[i].textContent = '';
+                break
 
             }
-
+            
         }
+
+        if(handler.rounds === 9) handler.tie();
+
     }
     
     return {
