@@ -191,7 +191,7 @@ const gameModule = (function(){
             
         }
 
-        if(handler.rounds === 9) handler.tie();
+        if(handler.rounds === 9 && winner != false) handler.tie();
 
     }
     
