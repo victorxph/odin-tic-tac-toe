@@ -92,3 +92,66 @@ main{
     }
 
 }
+
+dialog{
+
+    color: $color;
+    background-color: $transparent;
+    border: none;
+    border-radius: 1rem;
+    position: fixed;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    min-width: 350px;
+
+    .close-dialog{
+
+        align-self: end;
+        cursor: pointer;
+
+    }
+
+    .mark{
+
+        font-size: 6rem;
+        font-weight: 700;
+
+    }
+
+    .winner-msg{
+
+        font-size: 3rem;
+
+    }
+
+    button{
+
+        @include restart-btn;
+        background-color: rgba(0, 0, 0, 0);
+
+        &:hover{
+
+            background-color: rgba(0, 0, 0, 0.3);
+
+        }
+
+    }
+
+
+    &::backdrop{
+
+        backdrop-filter: blur(6px);
+
+    }
+
+
+}
+
+.closed{
+
+    opacity: 0%;
+
+}

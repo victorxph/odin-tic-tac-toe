@@ -27,6 +27,8 @@ const gameModule = (function(){
         index: 0,
 
         playRound: function(index) {
+            
+            if(gameBoard.fields[index] !== 0) return;
 
             if (handler.rounds % 2 === 0) {
 
@@ -37,10 +39,15 @@ const gameModule = (function(){
                 playerO.turn = true;
 
             };
+
             handler.rounds++
+
             console.log('rounds: ',handler.rounds)
+
             let mark = playerO.turn === false ? 1 : -1;
-            gameBoard.fields.splice(index, 1, mark)
+
+            gameBoard.fields.splice(index, 1, mark);
+
             console.log('playRound > ', gameBoard.fields);
 
             if (handler.rounds > 4) {
@@ -67,35 +74,52 @@ const gameModule = (function(){
                 gameBoard.fields[2] + gameBoard.fields[4] + gameBoard.fields[6] === 3) {
 
                     winner = playerX;
-                    /* return */console.log('winner > ', playerX)
+                    this.win(playerX);
                     
-                } else if (gameBoard.fields[0] + gameBoard.fields[1] + gameBoard.fields[2] === 3 ||
-                gameBoard.fields[3] + gameBoard.fields[4] + gameBoard.fields[5] === 3 ||
-                gameBoard.fields[6] + gameBoard.fields[7] + gameBoard.fields[8] === 3 ||
-                gameBoard.fields[0] + gameBoard.fields[3] + gameBoard.fields[6] === 3 ||
-                gameBoard.fields[1] + gameBoard.fields[4] + gameBoard.fields[7] === 3 ||
-                gameBoard.fields[2] + gameBoard.fields[5] + gameBoard.fields[8] === 3 ||
-                gameBoard.fields[0] + gameBoard.fields[4] + gameBoard.fields[8] === 3 ||
-                gameBoard.fields[2] + gameBoard.fields[4] + gameBoard.fields[6] === 3) {
+                } else if (gameBoard.fields[0] + gameBoard.fields[1] + gameBoard.fields[2] === -3 ||
+                gameBoard.fields[3] + gameBoard.fields[4] + gameBoard.fields[5] === -3 ||
+                gameBoard.fields[6] + gameBoard.fields[7] + gameBoard.fields[8] === -3 ||
+                gameBoard.fields[0] + gameBoard.fields[3] + gameBoard.fields[6] === -3 ||
+                gameBoard.fields[1] + gameBoard.fields[4] + gameBoard.fields[7] === -3 ||
+                gameBoard.fields[2] + gameBoard.fields[5] + gameBoard.fields[8] === -3 ||
+                gameBoard.fields[0] + gameBoard.fields[4] + gameBoard.fields[8] === -3 ||
+                gameBoard.fields[2] + gameBoard.fields[4] + gameBoard.fields[6] === -3) {
                     
                     winner = playerO;
-                    /* return */console.log('winner > ', playerO)
+                    console.log('winner > ', winner)
+                    this.win(playerO);
 
-            }
+                }
 
             return null
 
         },
 
+        win: function(winner){
+
+            modal.classList.remove('closed');
+            modal.showModal();
+            turnDiv.classList.add('closed')
+
+        },
+
         restartGame: function restartGame(){
 
-            gameBoard = [0,0,0,0,0,0,0,0,0];
+            gameBoard.fields = [0,0,0,0,0,0,0,0,0];
             handler.rounds = 0;
             playerO.turn = false;
+            modal.classList.add('closed')
+            turnDiv.classList.remove('closed')
+            modal.close()
+            render();
         
         }
     
     }
+
+    //DOM
+
+    let turnDiv = document.querySelector('.turn-div');
 
     let squares = Array.from(document.querySelectorAll('.game-square'));
     squares.forEach(square => square.addEventListener('click',() => { 
@@ -103,17 +127,46 @@ const gameModule = (function(){
         handler.playRound(handler.index)
     }));
 
+    let restartBtn = document.querySelector('.restart-btn');
+    restartBtn.addEventListener('click', handler.restartGame);
+
+    let dialogRestartBtn = document.querySelector('.dialog-restart-btn');
+    dialogRestartBtn.addEventListener('click', handler.restartGame);
+
+    let modal = document.querySelector('.modal');
+    let closeModal = document.querySelector('.close-dialog');
+    closeModal.addEventListener('click', () => {
+        modal.close();
+        modal.classList.add('closed')
+    });
+
     function render(){
 
+        if(playerO.turn === false && handler.rounds != 0){
+
+            turnDiv.textContent = "O's turn"
+            
+        } else {
+            
+            turnDiv.textContent = "X's turn"
+
+        }
+
         for(i = 0; i < gameBoard.fields.length; i++){
+
+            switch();
             
             if(gameBoard.fields[i] === 1){
 
                 squares[i].textContent = 'X';
                 
-            } else if(gameBoard.fields[i] === -1) {
+            } else if(gameBoard.fields[i] === -1){
                 
                 squares[i].textContent = 'O';
+                
+            } else if(gameBoard.fields[i] === 0){
+                
+                squares[i].textContent = '';
 
             }
 
@@ -130,74 +183,3 @@ const gameModule = (function(){
     }
 
 })();
-
-// let gameBoard = [0,0,0,0,0,0,0,0,0];
-//rm
-// let Oturn = false;
-// let playerX = 'x'
-// let playerO = 'o'
-//private --Handler
-// let rounds = 0;
-//rm
-// if(Oturn === false) {playRound(5, playerX)}
-//public --Handler
-// function playRound(index){
-
-//     if(rounds % 2 === 0) {
-        
-//         Oturn = false;
-    
-//     } else {
-
-//         Oturn = true;
-
-//     };
-//     rounds++
-//     console.log(rounds)
-//     let mark = Oturn === false ? 1 : -1;
-//     gameBoard.splice(index, 1, mark)
-//     console.log(gameBoard);
-
-//     if(rounds > 4){
-
-//         checkRound();
-
-//     }
-
-// }
-//private -- Handler
-// function checkRound(){
-
-//     if(gameBoard[0] + gameBoard[1] + gameBoard[2] === 3 ||
-//        gameBoard[3] + gameBoard[4] + gameBoard[5] === 3 ||
-//        gameBoard[6] + gameBoard[7] + gameBoard[8] === 3 ||
-//        gameBoard[0] + gameBoard[3] + gameBoard[6] === 3 ||
-//        gameBoard[1] + gameBoard[4] + gameBoard[7] === 3 ||
-//        gameBoard[2] + gameBoard[5] + gameBoard[8] === 3 ||
-//        gameBoard[0] + gameBoard[4] + gameBoard[8] === 3 ||
-//        gameBoard[2] + gameBoard[4] + gameBoard[6] === 3){
-
-//             /* return */console.log('X wins')
-
-//        } else if(gameBoard[0] + gameBoard[1] + gameBoard[2] === 3 ||
-//         gameBoard[3] + gameBoard[4] + gameBoard[5] === 3 ||
-//         gameBoard[6] + gameBoard[7] + gameBoard[8] === 3 ||
-//         gameBoard[0] + gameBoard[3] + gameBoard[6] === 3 ||
-//         gameBoard[1] + gameBoard[4] + gameBoard[7] === 3 ||
-//         gameBoard[2] + gameBoard[5] + gameBoard[8] === 3 ||
-//         gameBoard[0] + gameBoard[4] + gameBoard[8] === 3 ||
-//         gameBoard[2] + gameBoard[4] + gameBoard[6] === 3){
-
-//             /* return */console.log('O wins')
-
-//         }
-
-// }
-// //public -- Handler
-// function restartGame(){
-
-//     gameBoard = [0,0,0,0,0,0,0,0,0];
-//     rounds = 0;
-//     Oturn = false;
-
-// };

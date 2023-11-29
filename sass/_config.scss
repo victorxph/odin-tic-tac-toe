@@ -3,3 +3,22 @@
 $color: #D4D4D4; 
 $bg-color: #171717;
 $square: #262626;
+$transparent: rgba(0, 0, 0, 0);
+
+@mixin restart-btn {
+
+    border: none;
+    background-color: $bg-color;
+    color: $color;
+    padding: 20px 40px;
+    border-radius: .5rem;
+    font-size: 1.5rem;
+
+    &:hover {
+
+        background-color: $square;
+        cursor: pointer;
+
+    }
+
+}
