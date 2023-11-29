@@ -26,6 +26,7 @@ const gameModule = (function(){
         rounds: 0,
         index: 0,
         playable: true,
+        winner: null,
 
         playRound: function(index) {
             
@@ -60,10 +61,8 @@ const gameModule = (function(){
             render();
 
         },
-
+        
         checkRound: function checkRound(){
-
-            let winner;
 
             if (gameBoard.fields[0] + gameBoard.fields[1] + gameBoard.fields[2] === 3 ||
                 gameBoard.fields[3] + gameBoard.fields[4] + gameBoard.fields[5] === 3 ||
@@ -76,7 +75,7 @@ const gameModule = (function(){
 
                     winner = playerX;
                     this.win(playerX);
-                    
+
                 } else if (gameBoard.fields[0] + gameBoard.fields[1] + gameBoard.fields[2] === -3 ||
                 gameBoard.fields[3] + gameBoard.fields[4] + gameBoard.fields[5] === -3 ||
                 gameBoard.fields[6] + gameBoard.fields[7] + gameBoard.fields[8] === -3 ||
@@ -87,7 +86,6 @@ const gameModule = (function(){
                 gameBoard.fields[2] + gameBoard.fields[4] + gameBoard.fields[6] === -3) {
                     
                     winner = playerO;
-                    console.log('winner > ', winner)
                     this.win(playerO);
 
                 }
@@ -191,7 +189,7 @@ const gameModule = (function(){
             
         }
 
-        if(handler.rounds === 9 && winner != false) handler.tie();
+        if(handler.rounds === 9 && handler.winner != false) handler.tie();
 
     }
     
