@@ -24,8 +24,9 @@ const gameModule = (function(){
     let handler = {
 
         rounds: 0,
+        index: 0,
 
-        playRound: function (index) {
+        playRound: function(index) {
 
             if (handler.rounds % 2 === 0) {
 
@@ -40,7 +41,7 @@ const gameModule = (function(){
             console.log('rounds: ',handler.rounds)
             let mark = playerO.turn === false ? 1 : -1;
             gameBoard.fields.splice(index, 1, mark)
-            console.log(gameBoard.fields);
+            console.log('playRound > ', gameBoard.fields);
 
             if (handler.rounds > 4) {
 
@@ -97,18 +98,26 @@ const gameModule = (function(){
     }
 
     let squares = Array.from(document.querySelectorAll('.game-square'));
-    squares.forEach(square => square.addEventListener('click', handler.playRound))
+    squares.forEach(square => square.addEventListener('click',() => { 
+        handler.index =  Number(square.id.slice(-1));
+        handler.playRound(handler.index)
+    }));
 
     function render(){
 
-        for(i = 0; i <= gameBoard.fields.length; i++){
+        for(i = 0; i < gameBoard.fields.length; i++){
             
-            if(gameBoard.fields !== 0){
+            if(gameBoard.fields[i] === 1){
+
+                squares[i].textContent = 'X';
                 
-            squares[i].textContent = gameBoard.fields[i] === 1 ? 'X' : 'O';
+            } else if(gameBoard.fields[i] === -1) {
+                
+                squares[i].textContent = 'O';
+
+            }
 
         }
-    }
     }
     
     return {
